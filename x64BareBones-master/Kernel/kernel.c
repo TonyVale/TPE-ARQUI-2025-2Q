@@ -52,7 +52,7 @@ int main()
 	
 	setTickFreq(100);
 	load_idt();	
-	sound(800, 1000);
+	sound(800, 10);
 	//startKernel();
 
 	((EntryPoint)sampleCodeModuleAddress)();

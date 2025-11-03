@@ -68,8 +68,6 @@ void startGame(){
     gameNotOver = 1;
     initializeTronDisplay();
     
-    printfPos("Score P1: ",36 + 3 * 34, 14, 3 );
-    resetFruit();
 
     if (charAux == 49){ //SINGLE PLAYER MODE
         gameNotOver2 = 0;
@@ -99,34 +97,20 @@ void gameEngine(){
         if(seconds_elapsed() != seconds){
             interpretInput1();
             seconds++;
-            grid[headCoordX1][headCoordY1].nextDirectionX = dirX1;
-            grid[headCoordX1][headCoordY1].nextDirectionY = dirY1;
+            grid[headCoordX1][headCoordY1].nextDirectionX = 0;
+            grid[headCoordX1][headCoordY1].nextDirectionY = 0;
 
             headCoordX1 += dirX1;
             headCoordY1 += dirY1;
-            if (headCoordX1 == fruitX && headCoordY1 == fruitY){
-                player1Len++;
-                sound(700, 10);
-                resetFruit();
-                refreshScreen();
-            } else {
-                refreshScreen();
-                int auxTailX = tailCoordX1;
-                int auxTailY = tailCoordY1;
 
-                tailCoordX1 += grid[auxTailX][auxTailY].nextDirectionX;
-                tailCoordY1 += grid[auxTailX][auxTailY].nextDirectionY;
-
-                grid[auxTailX][auxTailY].player = 0;
-                grid[auxTailX][auxTailY].nextDirectionX = 0;
-                grid[auxTailX][auxTailY].nextDirectionY = 0;
-         
-            }
+            refreshScreen();
+                
             checkIfOver();
             grid[headCoordX1][headCoordY1].player = 1;
         }
     }
 
+    sound(800, 10);
     gameOverMenu();
 
 }
@@ -136,10 +120,7 @@ void gameEngine2P(){
     char gameNotOverForAll = 1;
     char inputAux = 0;
     int seconds = seconds_elapsed(); 
-    int auxTailX1;
-    int auxTailY1;
-    int auxTailX2;
-    int auxTailY2;
+
 
     loadp1();
     loadp2();
@@ -172,59 +153,8 @@ void gameEngine2P(){
             headCoordX2 += dirX2;
             headCoordY2 += dirY2;
 
-            if (headCoordX1 == fruitX && headCoordY1 == fruitY){
-                player1Len++;
-                sound(700, 10);
-
-                refreshScreen();
-                auxTailX2 = tailCoordX2;
-                auxTailY2 = tailCoordY2;
-
-                tailCoordX2 += grid[auxTailX2][auxTailY2].nextDirectionX;
-                tailCoordY2 += grid[auxTailX2][auxTailY2].nextDirectionY;
-
-                grid[auxTailX2][auxTailY2].player = 0;
-                grid[auxTailX2][auxTailY2].nextDirectionX = 0;
-                grid[auxTailX2][auxTailY2].nextDirectionY = 0;
-
-                resetFruit();
-                
-            } else if(headCoordX2 == fruitX && headCoordY2 == fruitY){
-                player2Len++;
-                sound(700, 10);
-                
-                refreshScreen();
-                auxTailX1 = tailCoordX1;
-                auxTailY1 = tailCoordY1;
-    
-                tailCoordX1 += grid[auxTailX1][auxTailY1].nextDirectionX;
-                tailCoordY1 += grid[auxTailX1][auxTailY1].nextDirectionY;
-
-                grid[auxTailX1][auxTailY1].player = 0;
-                grid[auxTailX1][auxTailY1].nextDirectionX = 0;
-                grid[auxTailX1][auxTailY1].nextDirectionY = 0;
-
-                resetFruit();
-            } else {
-                refreshScreen();
-                auxTailX1 = tailCoordX1;
-                auxTailY1 = tailCoordY1;
-                auxTailX2 = tailCoordX2;
-                auxTailY2 = tailCoordY2;
-
-                tailCoordX1 += grid[auxTailX1][auxTailY1].nextDirectionX;
-                tailCoordY1 += grid[auxTailX1][auxTailY1].nextDirectionY;
-                tailCoordX2 += grid[auxTailX2][auxTailY2].nextDirectionX;
-                tailCoordY2 += grid[auxTailX2][auxTailY2].nextDirectionY;
-
-                grid[auxTailX1][auxTailY1].player = 0;
-                grid[auxTailX1][auxTailY1].nextDirectionX = 0;
-                grid[auxTailX1][auxTailY1].nextDirectionY = 0;
-                grid[auxTailX2][auxTailY2].player = 0;
-                grid[auxTailX2][auxTailY2].nextDirectionX = 0;
-                grid[auxTailX2][auxTailY2].nextDirectionY = 0;
+            refreshScreen();
          
-            }
             checkIfOver();
             grid[headCoordX1][headCoordY1].player = 1;
             
@@ -237,6 +167,7 @@ void gameEngine2P(){
         }
     }
 
+    sound(800, 10);
     gameOverMenu();
     
 }
@@ -247,7 +178,7 @@ void initializationScreen(){
     largerFontSize();
     ClearScreen(0x003D3D3D);
     NewLine();
-    printf("SNAKE GAME");
+    printf("TRON GAME");
     NewLine();
     NewLine();
     printf("TO START SINGLE PLAYER MODE, PRESS 1");
@@ -309,51 +240,29 @@ void resetFruit(){
 }
 
 void loadp1(){
-    player1Len = 3;
 
     headCoordX1 = 5;
     headCoordY1 = 5;
     dirX1 = 1;
     dirY1 = 0;
 
-    grid[3][5].player = 1;
-    grid[3][5].nextDirectionX = 1;
-    grid[3][5].nextDirectionY = 0;
-    grid[4][5].player = 1;
-    grid[4][5].nextDirectionX = 1;
-    grid[4][5].nextDirectionY = 0;
     grid[5][5].player = 1;
 
     drawRectangle(36 + (headCoordX1) * 34 , 44 + headCoordY1 * 34, 34, 34, 0x000000FF);
-    drawRectangle(36 + (headCoordX1 -1) * 34 , 44 + headCoordY1 * 34, 34, 34, 0x000000FF);
-    drawRectangle(36 + (headCoordX1 -2) * 34 , 44 + headCoordY1 * 34, 34, 34, 0x000000FF);
 
-    tailCoordX1 = 3;
-    tailCoordY1 = 5;
 }
 
 void loadp2(){
-    player2Len = 3;
 
     headCoordX2 = 22;
     headCoordY2 = 14;
     dirX2 = -1;
     dirY2 = 0;
 
-    grid[24][14].player = 2;
-    grid[24][14].nextDirectionX = -1;
-    grid[24][14].nextDirectionY = 0;
-    grid[23][14].player = 2;
-    grid[23][14].nextDirectionX = -1;
-    grid[23][14].nextDirectionY = 0;
     grid[22][14].player = 2;
 
     drawRectangle(36 + (headCoordX2) * 34 , 44 + headCoordY2 * 34, 34, 34, 0x00FFFF00);
-    drawRectangle(36 + (headCoordX2 + 1) * 34 , 44 + headCoordY2 * 34, 34, 34, 0x00FFFF00);
-    drawRectangle(36 + (headCoordX2 + 2) * 34 , 44 + headCoordY2 * 34, 34, 34, 0x00FFFF00);
-
-    tailCoordX2 = 24;
-    tailCoordY2 = 14;
+    
 }
 
 void refreshScreen(){
