@@ -6,27 +6,15 @@ typedef struct {
     int nextDirectionY;
 } squareType;
 
-static int pseudoRand[50] = {
-    41, 228, 246, 230, 336, 325, 389, 99, 545, 0,
-    470, 9, 240, 144, 488, 200, 146, 201, 162, 207,
-    50, 401, 88, 270, 327, 433, 556, 306, 304, 175,
-    86, 14, 71, 333, 244, 508, 97, 301, 19, 310, 
-    426, 313, 319, 335, 457, 476, 535, 271, 190, 136 
-};
-
-int fruitX;
-int fruitY;
 //PLAYER1:
 int headCoordX1;
 int headCoordY1;
 
 char input1;
+
 int dirX1;
 int dirY1;
 
-int tailCoordX1;
-int tailCoordY1;
-int player1Len;
 
 //PLAYER2:
 int headCoordX2;
@@ -36,19 +24,13 @@ char input2;
 int dirX2;
 int dirY2;
 
-int tailCoordX2;
-int tailCoordY2;
-int player2Len;
-
 
 //GLOBAL:
 squareType grid[20][28];
 char gameNotOver;
 char gameNotOver2;
 
-int randIndex = 1;
 char gameMode;
-int i = 0;
 
 void startGame(){
     
@@ -65,7 +47,10 @@ void startGame(){
         } 
     }
     clearGrid();
+
     gameNotOver = 1;
+    gameNotOver2 = 1;
+    
     initializeTronDisplay();
     
 
@@ -76,7 +61,6 @@ void startGame(){
     } else if (charAux == 50){ //2-PLAYER MODE
         gameMode = 2;
         gameNotOver2 = 1;
-        printfPos("Score P2: ", 36 + (3 + 14) * 34, 14, 3);
         gameEngine2P();
     }   
 }
@@ -224,20 +208,6 @@ void initializeTronDisplay(){
     }
 }
 
-void resetFruit(){
-    int randomSquare = pseudoRand[randIndex];
-    if (randIndex > 49){
-        randIndex = 0;
-    } else {
-        randIndex++;
-    }
-    fruitX = (randomSquare % 28);
-    fruitY = (randomSquare / 28);
-    if (grid[fruitX][fruitY].player != 0){
-        resetFruit();
-    }
-    drawCircle(36 + fruitX * 34, 44 + fruitY * 34 , 17, 0x00FF0000);
-}
 
 void loadp1(){
 
@@ -266,33 +236,16 @@ void loadp2(){
 }
 
 void refreshScreen(){
-    if ((tailCoordX1 + tailCoordY1) % 2 == 0){
-        drawRectangle(36 + tailCoordX1 * 34, 44 + tailCoordY1 * 34, 34, 34, 0x00FFFFFF);
-    } else {
-        drawRectangle(36 + tailCoordX1 * 34, 44 + tailCoordY1 * 34, 34, 34, 0x00CCCCCC);
-    }
-    
-    drawRectangle(36 + headCoordX1 * 34 , 44 + headCoordY1 * 34, 34, 34, 0x000000FF);
 
+    drawRectangle(36 + headCoordX1 * 34 , 44 + headCoordY1 * 34, 34, 34, 0x000000FF);
     //PrintScore1: 
     drawRectangle(36 + 3 * 34 + 10 * 16, 14, 8 * 16 ,16,0x003D3D3D);
     char scoreBuffer[8];
-    itoaBase(player1Len, scoreBuffer, 10);
-    printfPos(scoreBuffer, 36 + 3 * 34 + 10 * 16, 14, 3);
 
     //PrintScore2 If necesary
     if(gameNotOver2 == 1){
-        if ((tailCoordX2 + tailCoordY2) % 2 == 0){
-            drawRectangle(36 + tailCoordX2 * 34, 44 + tailCoordY2 * 34, 34, 34, 0x00FFFFFF);
-        } else {
-            drawRectangle(36 + tailCoordX2 * 34, 44 + tailCoordY2 * 34, 34, 34, 0x00CCCCCC);
-        }
-    
-    drawRectangle(36 + headCoordX2 * 34 , 44 + headCoordY2 * 34, 34, 34, 0x00FFFF00);
-
+        drawRectangle(36 + headCoordX2 * 34 , 44 + headCoordY2 * 34, 34, 34, 0x00FFFF00);
         drawRectangle(36 + (3 + 14) * 34 + 10 * 16, 14, 8 * 16 ,16,0x003D3D3D);
-        itoaBase(player2Len, scoreBuffer, 10);
-        printfPos(scoreBuffer, 36 + (3 + 14) * 34 + 10 * 16, 14, 3);
     }
 }
 
@@ -313,20 +266,14 @@ void initializeGameOverScreen(){
     printfPos("GAME OVER!", 300, 300, 3);
     printfPos("To start Again, press spacebar", 300, 320, 3);
     printfPos("To quit, press Q", 300, 340, 3);
-    printfPos("Player 1 Score: ", 300, 400, 3);
-
-    char scoreBuffer[8];
-    itoaBase(player1Len, scoreBuffer, 10);
-    printfPos(scoreBuffer, 300 + 16 * 16, 400, 3);
     if (gameMode == 2){
-        printfPos("Player 2 Score: ", 300, 420, 3);
-        itoaBase(player2Len, scoreBuffer, 10);
-        printfPos(scoreBuffer, 300 + 16 * 16, 420, 3);
-
-        if (gameNotOver2 == 0){
-            printfPos("PLAYER ONE WINS", 300, 440, 3);
+        if(headCoordX1 == headCoordX2 && headCoordY1 == headCoordY2){
+            printfPos("TIE!", 300, 440, 3);
+        }
+        else if (gameNotOver2 == 0){
+            printfPos("PLAYER ONE WINS!", 300, 440, 3);
         } else if (gameNotOver == 0){
-            printfPos("PLAYER TWO WINS", 300, 440, 3);
+            printfPos("PLAYER TWO WINS!", 300, 440, 3);
         }
     }
 }

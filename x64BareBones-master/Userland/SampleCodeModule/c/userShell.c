@@ -20,8 +20,6 @@ static void help(){
     NewLine();
     printf("TIME - Imprime la hora y fecha actual");
     NewLine();
-    //printf("OBSOLETO: REGISTERS - Imprime cada registro y su contenido");
-    //NewLine();
     printf("TRON - Comienza el juego");
     NewLine();
     printf("ZERODIV - Causa una excepcion: divide por cero");
@@ -80,8 +78,6 @@ static void bufferInterpreter(){
         changeColor();
     } else if (strCompare(shellBuffer, "TIME")){
         printCurrentTime();
-    //} else if(strCompare(shellBuffer, "REGISTERS")){
-    //    registers();
     } else if (strCompare(shellBuffer, "TRON")){
         startGame();
     } else if (strCompare(shellBuffer, "ZERODIV")){
