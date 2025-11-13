@@ -39,7 +39,7 @@ void setTickFreq(uint16_t freq) {
     
     uint32_t div = 1193180 / freq;
     outb(0x43, 0x36);                  // 0x36: Channel 0, Mode 3, Low/High byte access
-    outb(0x40, (uint8_t)(div));        // Send the low byte of the divisor
+    outb(0x40, (uint8_t)(div & 0xFF));        // Send the low byte of the divisor
     outb(0x40, (uint8_t)(div >> 8));   // Send the high byte of the divisor
 }
 

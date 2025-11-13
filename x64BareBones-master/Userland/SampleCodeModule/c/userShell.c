@@ -26,6 +26,8 @@ static void help(){
     NewLine();
     printf("INVOPCODE - Causa una excepcion : invalid opcode");
     NewLine();
+    printf("HARDACCESS - Imprime el tiempo de accesso a Hardware");
+    NewLine();
     printf("HELP - Imprime todos los comandos disponibles");
     NewLine();
     NewLine();
@@ -84,7 +86,12 @@ static void bufferInterpreter(){
         zeroDivisionTrigger();
     } else if (strCompare(shellBuffer, "INVOPCODE")){
         invalidOpcodeTrigger();
-    } else {
+    } else if (strCompare(shellBuffer, "HARDACCESS"))
+    {
+        getHardAccess();
+    }
+     
+    else {
         printf("Comando no reconocido. Use HELP para mas informacion");
         NewLine();
         NewLine();

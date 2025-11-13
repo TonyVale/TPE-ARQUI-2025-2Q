@@ -32,6 +32,8 @@ char gameNotOver2;
 
 char gameMode;
 
+uint32_t fps;
+
 void startGame(){
     
     char charAux = 0;
@@ -72,7 +74,14 @@ void gameEngine(){
     
     loadp1();
 
+    fps = 0;
+    int frames = 0;
+    int lastTime = ticks_elapsed();
+
     while (gameNotOver){
+
+        int ticks = ticks_elapsed();
+
         inputAux = getKeyDown();
         if(inputAux != -1){
             input1 = inputAux;
@@ -88,7 +97,13 @@ void gameEngine(){
             headCoordY1 += dirY1;
 
             refreshScreen();
-                
+            wait(100);
+            frames++;
+            if (ticks - lastTime >= 1000) { // 1000 ticks = 1 segundo si PIT = 1000Hz
+                fps = frames;
+                frames = 0;
+                lastTime = ticks_elapsed();
+            }
             checkIfOver();
             grid[headCoordX1][headCoordY1].player = 1;
         }
@@ -105,12 +120,18 @@ void gameEngine2P(){
     char inputAux = 0;
     int seconds = seconds_elapsed(); 
 
+    
+    fps = 0;
+    int frames = 0;
+    int lastTime = ticks_elapsed();
 
     loadp1();
     loadp2();
 
     while (gameNotOverForAll){
         
+        int ticks = ticks_elapsed();
+
         inputAux = getKeyDown();
         if((inputAux == 65)|(inputAux == 68)|(inputAux == 83)|(inputAux == 87)|(inputAux == 9)){
             input1 = inputAux;
@@ -118,7 +139,7 @@ void gameEngine2P(){
             input2 = inputAux;
         }
 
-    if(seconds_elapsed() != seconds){
+        if(seconds_elapsed() != seconds){
 
             interpretInput1();
             interpretInput2();
@@ -138,7 +159,15 @@ void gameEngine2P(){
             headCoordY2 += dirY2;
 
             refreshScreen();
-         
+            wait(100);
+
+            frames++;
+            if (ticks - lastTime >= 1000) { // 1000 ticks = 1 segundo si PIT = 1000Hz
+                fps = frames;
+                frames = 0;
+                lastTime = ticks_elapsed();
+            }
+
             checkIfOver();
             grid[headCoordX1][headCoordY1].player = 1;
             
@@ -192,7 +221,9 @@ void clearGrid(){
 }
 
 void initializeTronDisplay(){
+
     ClearScreen(0x003D3D3D);
+
     int initialY = 44;
     for(int j = 1; j <= 20; j++){
         int initialX = 36;
@@ -240,13 +271,19 @@ void refreshScreen(){
     drawRectangle(36 + headCoordX1 * 34 , 44 + headCoordY1 * 34, 34, 34, 0x000000FF);
     //PrintScore1: 
     drawRectangle(36 + 3 * 34 + 10 * 16, 14, 8 * 16 ,16,0x003D3D3D);
-    char scoreBuffer[8];
+
+    char fpsBuffer[8];
+    itoaBase(fps, fpsBuffer, 10);
 
     //PrintScore2 If necesary
     if(gameNotOver2 == 1){
         drawRectangle(36 + headCoordX2 * 34 , 44 + headCoordY2 * 34, 34, 34, 0x00FFFF00);
         drawRectangle(36 + (3 + 14) * 34 + 10 * 16, 14, 8 * 16 ,16,0x003D3D3D);
     }
+
+    printfPos("fps:", 30, 10, 3);
+    drawRectangle(100, 10, 64 , 16 , 0x003D3D3D);
+    printfPos( fpsBuffer , 100, 10, 3);
 }
 
 void checkIfOver(){

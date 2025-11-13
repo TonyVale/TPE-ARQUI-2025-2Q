@@ -304,3 +304,22 @@ void zeroDivisionTrigger(){
 void invalidOpcodeTrigger(){
     throw_invalid_opcode();
 }
+
+int getHardAccess(){
+    int start = ticks_elapsed();
+
+    wait(0);
+
+    int end = ticks_elapsed();
+
+    int delta = end - start; 
+
+    char deltaBuffer[8];
+    itoaBase(delta, deltaBuffer, 10);
+
+    printf(deltaBuffer);
+    currentX = currentX + 10;
+    printf(" ms");
+    NewLine();
+    
+}

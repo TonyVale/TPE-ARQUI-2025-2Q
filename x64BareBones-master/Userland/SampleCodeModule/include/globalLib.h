@@ -50,4 +50,8 @@ void invalidOpcodeTrigger();
 void throw_zero_division();
 void throw_invalid_opcode();
 
+//Tiempo de acceso a hardware
+
+int getHardAccess();
+
 #endif // GLOBAL_LIB_H

@@ -49,8 +49,8 @@ void * initializeKernelBinary()
 
 int main()
 {	
-	
-	setTickFreq(100);
+	// freq de 10000 -> 1 tick = 1 ms
+	setTickFreq(1000);
 	load_idt();	
 	//sound(800, 10);
 	//startKernel();
