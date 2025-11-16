@@ -309,7 +309,7 @@ int getHardAccess(){
     
     int start = ticks_elapsed();
     
-    /*for(int i = 0; i < 1000000; i++)*/ 
+    for(int i = 0; i < 10000; i++) 
         drawRectangle(1000, 1000, 1,1, bgColor);
 
     int end = ticks_elapsed();

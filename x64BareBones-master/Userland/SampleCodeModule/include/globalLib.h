@@ -50,7 +50,7 @@ void invalidOpcodeTrigger();
 void throw_zero_division();
 void throw_invalid_opcode();
 
-//Tiempo de acceso a hardware
+//Tiempo de acceso a hardware sobre 10000  llamadas
 
 int getHardAccess();
 
