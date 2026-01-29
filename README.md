@@ -1,6 +1,13 @@
-#SO made in assembler with barebonex64.
+##SO made in assembler + C with barebonex64.
 
-To run
+#Project description
+
+SO based on X64Bare-Bones. 
+Console commands.
+Self-developed drivers. 
+Tron game. 
+
+#RUN
 
 docker run -d -v ${PWD}:/root --security-opt seccomp:unconfined -it --name TPE  agodio/itba-so:2.0
 
